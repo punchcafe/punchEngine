@@ -1,8 +1,6 @@
 #ifndef solidBody_h
 #define solidBody_h
 
-#include <Arduboy2.h>
-
 class SolidBody {
     int halfWidth;
     int displacement [2];

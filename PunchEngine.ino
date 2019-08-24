@@ -1,19 +1,10 @@
-/*
-Hello, World! example
-June 11, 2015
-Copyright (C) 2015 David Martinez
-All rights reserved.
-This code is the most basic barebones code for writing a program for Arduboy.
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-*/
 
 #include <Arduboy2.h>
 
 #include "src/solidBody.h"
+#include "src/forceBody.h"
+#include "src/physicsResolver.h"
+#include "src/forceField.h"
 
 const unsigned char PROGMEM punchLogo[] =
 {
@@ -22,153 +13,6 @@ const unsigned char PROGMEM punchLogo[] =
 0x00, 0x00, 0xfc, 0x6c, 0x4c, 0x6c, 0x3c, 0x00, 0x00, 0x3c, 0x2c, 0x4c, 0x4c, 0xfc, 0xf8, 0x00,
 0x00, 0x10, 0x3f, 0x00, 0x00, 0x07, 0x1f, 0x1d, 0x1d, 0x17, 0x17, 0x03, 0x60, 0x3f, 0x1f, 0x00,
 };
-
-class ForceBody {
-  SolidBody* body;
-  int forceVector [2];
-  //lets make this refferences
-  //space over which would count as collision. dont forget to edge out corners.
-
-  public:
-    ForceBody(SolidBody* solidBody){
-    body = solidBody;
-  }
-    SolidBody* getBody() {
-      return body;
-    }
-    int getXForceVector () {
-      return forceVector[0];
-    };
-    int getYForceVector () {
-      return forceVector [1];
-    }
-    void setForceVector (int newForceVector [2]) {
-      forceVector[0] = newForceVector[0];
-      forceVector[1] = newForceVector[1];
-    };
-    //use this to determine area, use same functionality
-    int getCollisionZone_x1 () {
-      return body->get_sx()-body->getHalfWidth();
-    }
-    int getCollisionZone_x2 () {
-      return body->get_sx()+body->getHalfWidth();
-    }
-
-    int getCollisionZone_y1 () {
-      return body->get_sy()-body->getHalfWidth();
-    }
-
-    int getCollisionZone_y2 () {
-      return body->get_sy()+body->getHalfWidth();
-    }
-};
-
-class PhysicsResolvers {
-  public:
-  bool isContact(int p [2] , int x_1, int x_2, int y_1, int y_2){
-    //seperate
-    //make this body.isContact(refferenceBody)? or keep static for memory
-   bool result = (((x_1-1 <= p[0]) && (p[0] <= (x_2 +1)))&&(((y_1 - 1) <= p[1]) && (p[1] <= (y_2 + 1))));
-  return result;
-  }
-};
-
- class ForceField {
-  int gConstant = 10;
-  ForceBody* bodies [10]{0};
-  PhysicsResolvers physicsResolver;
-  //ForceResolver->
-  //AccelerationResolver->based on force bodies
-  //VelocityAppender
-
-  //max number of bodies in a frame
-  //temporary fieldMapSoln, checks for 2
-  //initially until i work out how to get fuckin vectors
-  public:
-    ForceField() {
-      };
-      //MAKE SPECIAL FORCEBODY, 0th index?
-    ForceBody* getForceBody(int index) {
-      return bodies[index];
-    }
-    void setForceBody(int index, ForceBody* forceBody) {
-      bodies[index] = forceBody;
-    }
-
-//parent in resolveForces
-
-    void addGravity(){
-      for(int i = 0; i < sizeof(bodies); i++){
-        if(bodies[i] != 0){
-          int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getBody()->getMass()*gConstant};
-          bodies[i]->setForceVector(forceVector);
-        }
-      }
-    }
-
-    void resolveColissions(){
-      for(int i = 0; i < sizeof(bodies); i++){
-        if(bodies[i] != 0){
-          for(int j = 0; j < sizeof(bodies); j++){
-            if(j != i && bodies[j] != 0){
-              if(isColliding(bodies[i],bodies[j])){
-                int forceVector [2] = {bodies[i]->getXForceVector(), 0};
-                bodies[i]->setForceVector(forceVector);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    //void resolveVelocities
-    //for(i in bodies){ bodies[i]->getBody()->setVelocity(velocity + (force/mass)*UNIT_TIME) }
-
-    //void resolveDisplacements
-    //s = s + v*t
-
-    bool isColliding(ForceBody* body, ForceBody* otherBody){
-      //only works for squares
-      bool result = false;
-      ForceBody* smallerBody = body->getBody()->getHalfWidth() > otherBody->getBody()->getHalfWidth() ?
-                                body : otherBody;
-      ForceBody* biggerBody = body->getBody()->getHalfWidth() > otherBody->getBody()->getHalfWidth() ?
-                                otherBody : body;
-      int smallerBodyCorners[4][2] = {
-        {
-          smallerBody->getBody()->get_sx()+smallerBody->getBody()->getHalfWidth(),
-          smallerBody->getBody()->get_sy()-smallerBody->getBody()->getHalfWidth()
-        },
-        {
-          smallerBody->getBody()->get_sx()+smallerBody->getBody()->getHalfWidth(),
-          smallerBody->getBody()->get_sy()+smallerBody->getBody()->getHalfWidth()
-        },
-        {
-          smallerBody->getBody()->get_sx()-smallerBody->getBody()->getHalfWidth(),
-          smallerBody->getBody()->get_sy()+smallerBody->getBody()->getHalfWidth()
-          },
-        {
-          smallerBody->getBody()->get_sx()-smallerBody->getBody()->getHalfWidth(),
-          smallerBody->getBody()->get_sy()-smallerBody->getBody()->getHalfWidth()
-        }
-      };
-//change it to halflength half height
-      for(int i = 0; i<4; i++){
-        result = result || physicsResolver.isContact(
-          smallerBodyCorners[i],
-          biggerBody->getBody()->get_sx()-biggerBody->getBody()->getHalfWidth(),
-          biggerBody->getBody()->get_sx()+biggerBody->getBody()->getHalfWidth(),
-          biggerBody->getBody()->get_sy()-biggerBody->getBody()->getHalfWidth(),
-          biggerBody->getBody()->get_sy()+biggerBody->getBody()->getHalfWidth()
-          );
-      }
-
-      return result;
-    }
-    //int forceVector resolveCollision(ForceBody body){return 0;};
-};
-
-
 // make an instance of arduboy used for many functions
 Arduboy2 arduboy;
 
@@ -191,7 +35,7 @@ SolidBody* thirdRef = &third;
 ForceBody wrappedDude(refDude);
 ForceBody wrappedRock(inanimateRef);
 ForceBody wrappedThird(thirdRef);
-PhysicsResolvers resolver;
+PhysicsResolver resolver;
 ForceBody* reflectDude = &wrappedDude;
   ForceBody* reflectRock = &wrappedRock;
   ForceBody* reflectThird = &wrappedThird;
