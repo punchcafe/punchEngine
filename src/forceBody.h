@@ -11,6 +11,7 @@ class ForceBody {
     SolidBody* getBody();
     int getXForceVector ();
     int getYForceVector ();
+    void set_vx (int vx);
     void setForceVector (int newForceVector [2]);
     int getCollisionZone_x1 ();
     int getCollisionZone_x2 ();

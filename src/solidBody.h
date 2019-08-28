@@ -4,7 +4,7 @@
 class SolidBody {
     int halfWidth;
     int displacement [2];
-    int velocity [2];
+    int velocity [2] = {0,0};
     int mass;
    public:
     SolidBody();

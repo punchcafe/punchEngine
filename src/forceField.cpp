@@ -1,4 +1,5 @@
 #include "forceField.h"
+#include "solidBody.h"
 
 ForceField::ForceField() {};
   //MAKE SPECIAL FORCEBODY, 0th index?
@@ -35,11 +36,26 @@ void ForceField::resolveColissions(){
   }
 }
 
-//void resolveVelocities
-//for(i in bodies){ bodies[i]->getBody()->setVelocity(velocity + (force/mass)*UNIT_TIME) }
+void ForceField::resolveVelocities(){
+  for(int i = 0; i < sizeof(bodies); i++){
+    if(bodies[i] != 0){
+      //int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getXForceVector()};
+      //bodies[i]->setForceVector(forceVector);
+      SolidBody& tempBody = *(bodies[i]->getBody());
+      tempBody.set_vx(1);
+    }
+  }
+}
 
-//void resolveDisplacements
-//s = s + v*t
+void ForceField::resolveDisplacements(){
+  for(int i = 0; i < sizeof(bodies); i++){
+    if(bodies[i] != 0){
+      bodies[i]->getBody()->set_sx(bodies[i]->getBody()->get_vx()*1);
+      bodies[i]->getBody()->set_sy(bodies[i]->getBody()->get_vx()*1);//time unit, pass through constructor.
+    }
+  }
+}
+
 
 bool ForceField::isColliding(ForceBody* body, ForceBody* otherBody){
   //only works for squares

@@ -13,6 +13,8 @@ const unsigned char PROGMEM punchLogo[] =
 0x00, 0x00, 0xfc, 0x6c, 0x4c, 0x6c, 0x3c, 0x00, 0x00, 0x3c, 0x2c, 0x4c, 0x4c, 0xfc, 0xf8, 0x00,
 0x00, 0x10, 0x3f, 0x00, 0x00, 0x07, 0x1f, 0x1d, 0x1d, 0x17, 0x17, 0x03, 0x60, 0x3f, 0x1f, 0x00,
 };
+
+
 // make an instance of arduboy used for many functions
 Arduboy2 arduboy;
 
@@ -41,9 +43,12 @@ ForceBody* reflectDude = &wrappedDude;
   ForceBody* reflectThird = &wrappedThird;
   ForceField loadMe;
 
+int breakChecker;
+
 // This function runs once in your game.
 // use it for anything that needs to be set only once in your game.
 void setup() {
+  breakChecker = 0;
   loadMe.setForceBody(0, reflectDude);
   loadMe.setForceBody(1, reflectThird);
   // initiate arduboy instance
@@ -71,15 +76,25 @@ void setup() {
 // this is where our game logic goes.
 void loop() {
   // pause render until it's time for the next frame
-
-
-
-
-  loadMe.addGravity();
-  loadMe.resolveColissions();
-
+breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   if (!(arduboy.nextFrame()))
     return;
+refDude->set_vx(0);
+dude.set_vy(0);
+  third.set_vx(0);
+  third.set_vy(0);
+  loadMe.addGravity();
+  loadMe.resolveVelocities();
+  loadMe.resolveColissions();
+  
+  //resolving vel
+
+  
+  if(arduboy.pressed(LEFT_BUTTON)){
+    dude.set_vx(2);
+  } else if (arduboy.pressed(RIGHT_BUTTON)){
+    dude.set_vx(-2);
+  }
 
   if(arduboy.pressed(B_BUTTON)){
     if((dude.get_vy() == 0 && dude.get_sy()>=50)||
@@ -91,22 +106,10 @@ void loop() {
   if((dude.get_sy() - dude.get_vy()) > floor_y){
     dude.set_sy(floor_y);
     dude.set_vy(0);
-  } else if (thing.isColliding(reflectDude, reflectThird)){
-    if(dude.get_vy() < 0)  dude.set_vy(0);
-    dude.set_sy(dude.get_sy() - dude.get_vy()*t);
-    }else {
-    dude.set_sy(dude.get_sy() - dude.get_vy()*t);
-    dude.set_vy(dude.get_vy() -1);
   }
 
 
-  dude.set_vx(0);
-  if(arduboy.pressed(LEFT_BUTTON)){
-    dude.set_vx(2);
-  } else if (arduboy.pressed(RIGHT_BUTTON)){
-    dude.set_vx(-2);
-  }
-  dude.set_sx(dude.get_sx() - dude.get_vx()*t);
+  
 
 
 
@@ -116,7 +119,7 @@ void loop() {
   arduboy.print(F("Punch Cafe"));
     arduboy.setCursor(15, 30);
   arduboy.print(F("Physics Eng."));
-    arduboy.setCursor(2, 52);
+    arduboy.setCursor(2, 50);
   arduboy.print(F("......................."));
 
   arduboy.setCursor(inanimate.get_sx(),inanimate.get_sy());
@@ -124,14 +127,9 @@ void loop() {
     arduboy.setCursor(third.get_sx(),third.get_sy());
   arduboy.print("-");
 //work out something to make this work
-  int collisionZone [2][2];
-  for(int i = 0; i < 2; i++){
-    for(int j = 0; j < 2; j++){
+  
 
-      }
-    }
-
-
+int collisionZone [2][2];
   collisionZone[0][0] = wrappedDude.getCollisionZone_x1();
   collisionZone[0][1] = wrappedDude.getCollisionZone_x2();
   collisionZone[1][0] = wrappedDude.getCollisionZone_y1();
@@ -147,35 +145,13 @@ void loop() {
       arduboy.print(F("-"));
       };
 
-
+ 
+arduboy.setCursor(110, 10);
+arduboy.print(breakChecker);
   arduboy.setCursor(loadMe.getForceBody(0)->getBody()->get_sx(), loadMe.getForceBody(0)->getBody()->get_sy());
   arduboy.print(F("Q"));
   arduboy.setCursor(110,50);
   arduboy.print(loadMe.getForceBody(0)->getYForceVector());
-  int displacement [2] = {wrappedDude.getBody()->get_sx(), wrappedDude.getBody()->get_sy()};
-  //if(resolver.isContact(displacement, wrappedRock.getCollisionZone_x1(), wrappedRock.getCollisionZone_x2(), wrappedRock.getCollisionZone_y1(), wrappedRock.getCollisionZone_y2())){
-
-
-
-
-
-
-  if(thing.isColliding(reflectDude,reflectRock)){
-    arduboy.clear();
-    arduboy.setCursor(15, 15);
-  arduboy.print(F("Congrats!"));
-  arduboy.setCursor(15, 30);
-  arduboy.print(wrappedRock.getCollisionZone_x1());
-  arduboy.print(wrappedRock.getCollisionZone_x2());
-  arduboy.setCursor(15, 40);
-  arduboy.print(wrappedRock.getCollisionZone_y1());
-  arduboy.print(wrappedRock.getCollisionZone_y2());
-  arduboy.setCursor(15, 50);
-  arduboy.print(displacement[0]);
-  arduboy.print(displacement[1]);
-  }
-
-
 
   Sprites::drawOverwrite(90, 20, punchLogo, 0);
 

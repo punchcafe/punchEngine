@@ -21,11 +21,8 @@ class ForceField {
    void setForceBody(int index, ForceBody* forceBody);
    void addGravity();
    void resolveColissions();
-   //void resolveVelocities
-   //for(i in bodies){ bodies[i]->getBody()->setVelocity(velocity + (force/mass)*UNIT_TIME) }
-
-   //void resolveDisplacements
-   //s = s + v*t
+   void resolveVelocities();
+   void resolveDisplacements();
    bool isColliding(ForceBody* body, ForceBody* otherBody);
    //int forceVector resolveCollision(ForceBody body){return 0;};
 };
