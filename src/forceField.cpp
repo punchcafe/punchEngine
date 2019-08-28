@@ -1,5 +1,4 @@
 #include "forceField.h"
-#include "solidBody.h"
 
 ForceField::ForceField() {};
   //MAKE SPECIAL FORCEBODY, 0th index?
@@ -15,7 +14,7 @@ void ForceField::setForceBody(int index, ForceBody* forceBody) {
 void ForceField::addGravity(){
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
-      int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getBody()->getMass()*gConstant};
+      int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getMass()*gConstant};
       bodies[i]->setForceVector(forceVector);
     }
   }
@@ -41,8 +40,6 @@ void ForceField::resolveVelocities(){
     if(bodies[i] != 0){
       //int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getXForceVector()};
       //bodies[i]->setForceVector(forceVector);
-      SolidBody& tempBody = *(bodies[i]->getBody());
-      tempBody.set_vx(1);
     }
   }
 }
@@ -50,8 +47,8 @@ void ForceField::resolveVelocities(){
 void ForceField::resolveDisplacements(){
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
-      bodies[i]->getBody()->set_sx(bodies[i]->getBody()->get_vx()*1);
-      bodies[i]->getBody()->set_sy(bodies[i]->getBody()->get_vx()*1);//time unit, pass through constructor.
+      bodies[i]->set_sx(bodies[i]->get_vx()*1);
+      bodies[i]->set_sy(bodies[i]->get_vx()*1);//time unit, pass through constructor.
     }
   }
 }
@@ -60,36 +57,36 @@ void ForceField::resolveDisplacements(){
 bool ForceField::isColliding(ForceBody* body, ForceBody* otherBody){
   //only works for squares
   bool result = false;
-  ForceBody* smallerBody = body->getBody()->getHalfWidth() > otherBody->getBody()->getHalfWidth() ?
+  ForceBody* smallerBody = body->getHalfWidth() > otherBody->getHalfWidth() ?
                             body : otherBody;
-  ForceBody* biggerBody = body->getBody()->getHalfWidth() > otherBody->getBody()->getHalfWidth() ?
+  ForceBody* biggerBody = body->getHalfWidth() > otherBody->getHalfWidth() ?
                             otherBody : body;
   int smallerBodyCorners[4][2] = {
     {
-      smallerBody->getBody()->get_sx()+smallerBody->getBody()->getHalfWidth(),
-      smallerBody->getBody()->get_sy()-smallerBody->getBody()->getHalfWidth()
+      smallerBody->get_sx()+smallerBody->getHalfWidth(),
+      smallerBody->get_sy()-smallerBody->getHalfWidth()
     },
     {
-      smallerBody->getBody()->get_sx()+smallerBody->getBody()->getHalfWidth(),
-      smallerBody->getBody()->get_sy()+smallerBody->getBody()->getHalfWidth()
+      smallerBody->get_sx()+smallerBody->getHalfWidth(),
+      smallerBody->get_sy()+smallerBody->getHalfWidth()
     },
     {
-      smallerBody->getBody()->get_sx()-smallerBody->getBody()->getHalfWidth(),
-      smallerBody->getBody()->get_sy()+smallerBody->getBody()->getHalfWidth()
+      smallerBody->get_sx()-smallerBody->getHalfWidth(),
+      smallerBody->get_sy()+smallerBody->getHalfWidth()
       },
     {
-      smallerBody->getBody()->get_sx()-smallerBody->getBody()->getHalfWidth(),
-      smallerBody->getBody()->get_sy()-smallerBody->getBody()->getHalfWidth()
+      smallerBody->get_sx()-smallerBody->getHalfWidth(),
+      smallerBody->get_sy()-smallerBody->getHalfWidth()
     }
   };
 //change it to halflength half height
   for(int i = 0; i<4; i++){
     result = result || physicsResolver.isContact(
       smallerBodyCorners[i],
-      biggerBody->getBody()->get_sx()-biggerBody->getBody()->getHalfWidth(),
-      biggerBody->getBody()->get_sx()+biggerBody->getBody()->getHalfWidth(),
-      biggerBody->getBody()->get_sy()-biggerBody->getBody()->getHalfWidth(),
-      biggerBody->getBody()->get_sy()+biggerBody->getBody()->getHalfWidth()
+      biggerBody->get_sx()-biggerBody->getHalfWidth(),
+      biggerBody->get_sx()+biggerBody->getHalfWidth(),
+      biggerBody->get_sy()-biggerBody->getHalfWidth(),
+      biggerBody->get_sy()+biggerBody->getHalfWidth()
       );
   }
 

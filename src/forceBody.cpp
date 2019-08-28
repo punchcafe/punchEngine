@@ -1,13 +1,10 @@
 #include "forceBody.h"
-#include "solidBody.h"
 
-ForceBody::ForceBody(SolidBody* solidBody){
-  body = solidBody;
+ForceBody::ForceBody(){
+  mass = 1;
+  halfWidth = 5;
 }
 
-SolidBody* ForceBody::getBody() {
-  return body;
-}
 int ForceBody::getXForceVector () {
   return forceVector[0];
 }
@@ -21,16 +18,51 @@ void ForceBody::setForceVector (int newForceVector [2]) {
 }
 
 int ForceBody::getCollisionZone_x1 () {
-  return body->get_sx()-body->getHalfWidth();
+  return get_sx()-getHalfWidth();
 }
 int ForceBody::getCollisionZone_x2 () {
-  return body->get_sx()+body->getHalfWidth();
+  return get_sx()+getHalfWidth();
 }
 
 int ForceBody::getCollisionZone_y1 () {
-  return body->get_sy()-body->getHalfWidth();
+  return get_sy()-getHalfWidth();
 }
 
 int ForceBody::getCollisionZone_y2 () {
-  return body->get_sy()+body->getHalfWidth();
+  return get_sy()+getHalfWidth();
+}
+
+void ForceBody::setHalfWidth(int halfWidth){
+  this->halfWidth = halfWidth;
+}
+
+int ForceBody::getHalfWidth(){
+  return halfWidth;
+}
+void ForceBody::set_sx(int x) {
+  displacement[0] = x;
+}
+void ForceBody::set_sy(int y) {
+  displacement[1] = y;
+}
+void ForceBody::set_vx(int x) {
+  velocity[0] = x;
+}
+void ForceBody::set_vy(int y) {
+  velocity[1] = y;
+}
+int ForceBody::get_sx() {
+  return displacement[0];
+}
+int ForceBody::get_sy() {
+  return displacement[1];
+}
+int ForceBody::get_vx() {
+  return velocity[0];
+}
+int ForceBody::get_vy() {
+  return velocity[1];
+}
+int ForceBody::getMass() {
+  return mass;
 }

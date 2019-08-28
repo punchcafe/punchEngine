@@ -1,7 +1,6 @@
 
 #include <Arduboy2.h>
 
-#include "src/solidBody.h"
 #include "src/forceBody.h"
 #include "src/physicsResolver.h"
 #include "src/forceField.h"
@@ -28,15 +27,9 @@ int floor_y;
 
 
 ForceField thing;
-SolidBody dude;
-SolidBody* refDude = &dude;
-SolidBody inanimate;
-SolidBody* inanimateRef = &inanimate;
-SolidBody third;
-SolidBody* thirdRef = &third;
-ForceBody wrappedDude(refDude);
-ForceBody wrappedRock(inanimateRef);
-ForceBody wrappedThird(thirdRef);
+ForceBody wrappedDude;
+ForceBody wrappedRock;
+ForceBody wrappedThird;
 PhysicsResolver resolver;
 ForceBody* reflectDude = &wrappedDude;
   ForceBody* reflectRock = &wrappedRock;
@@ -57,12 +50,12 @@ void setup() {
   // here we set the framerate to 15, we do not need to run at
   // default 60 and it saves us battery life
   arduboy.setFrameRate(30);
-  dude.set_sx(50);
-  dude.set_sy(floor_y*1);
-  inanimate.set_sx(115);
-  inanimate.set_sy(15);
-  third.set_sx(15);
-  third.set_sy(45);
+  wrappedDude.set_sx(50);
+  wrappedDude.set_sy(floor_y*1);
+  wrappedRock.set_sx(115);
+  wrappedRock.set_sy(15);
+  wrappedThird.set_sx(15);
+  wrappedThird.set_sy(45);
   floor_y = 50;
   s_x = 50;
   s_y = floor_y*1;
@@ -79,10 +72,10 @@ void loop() {
 breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   if (!(arduboy.nextFrame()))
     return;
-refDude->set_vx(0);
-dude.set_vy(0);
-  third.set_vx(0);
-  third.set_vy(0);
+reflectDude->set_vx(0);
+wrappedDude.set_vy(0);
+  wrappedThird.set_vx(0);
+  wrappedThird.set_vy(0);
   loadMe.addGravity();
   loadMe.resolveVelocities();
   loadMe.resolveColissions();
@@ -91,21 +84,21 @@ dude.set_vy(0);
 
   
   if(arduboy.pressed(LEFT_BUTTON)){
-    dude.set_vx(2);
+    wrappedDude.set_vx(2);
   } else if (arduboy.pressed(RIGHT_BUTTON)){
-    dude.set_vx(-2);
+    wrappedDude.set_vx(-2);
   }
 
   if(arduboy.pressed(B_BUTTON)){
-    if((dude.get_vy() == 0 && dude.get_sy()>=50)||
-      (dude.get_vy() == 0)&&(thing.isColliding(reflectDude, reflectThird))){
-      dude.set_vy(4);
+    if((wrappedDude.get_vy() == 0 && wrappedDude.get_sy()>=50)||
+      (wrappedDude.get_vy() == 0)&&(thing.isColliding(reflectDude, reflectThird))){
+      wrappedDude.set_vy(4);
       }
   }
 
-  if((dude.get_sy() - dude.get_vy()) > floor_y){
-    dude.set_sy(floor_y);
-    dude.set_vy(0);
+  if((wrappedDude.get_sy() - wrappedDude.get_vy()) > floor_y){
+    wrappedDude.set_sy(floor_y);
+    wrappedDude.set_vy(0);
   }
 
 
@@ -122,9 +115,9 @@ dude.set_vy(0);
     arduboy.setCursor(2, 50);
   arduboy.print(F("......................."));
 
-  arduboy.setCursor(inanimate.get_sx(),inanimate.get_sy());
+  arduboy.setCursor(wrappedRock.get_sx(),wrappedRock.get_sy());
   arduboy.print("*");
-    arduboy.setCursor(third.get_sx(),third.get_sy());
+    arduboy.setCursor(wrappedThird.get_sx(),wrappedThird.get_sy());
   arduboy.print("-");
 //work out something to make this work
   
@@ -136,19 +129,19 @@ int collisionZone [2][2];
   collisionZone[1][1] = wrappedDude.getCollisionZone_y2();
 
     for(int i = 0; i < 2; i++){
-      arduboy.setCursor(collisionZone[0][i], wrappedDude.getBody()->get_sy());
+      arduboy.setCursor(collisionZone[0][i], wrappedDude.get_sy());
       arduboy.print(F("|"));
     };
 
         for(int j = 0; j < 2; j++){
-      arduboy.setCursor(wrappedDude.getBody()->get_sx(), collisionZone[1][j]);
+      arduboy.setCursor(wrappedDude.get_sx(), collisionZone[1][j]);
       arduboy.print(F("-"));
       };
 
  
 arduboy.setCursor(110, 10);
 arduboy.print(breakChecker);
-  arduboy.setCursor(loadMe.getForceBody(0)->getBody()->get_sx(), loadMe.getForceBody(0)->getBody()->get_sy());
+  arduboy.setCursor(loadMe.getForceBody(0)->get_sx(), loadMe.getForceBody(0)->get_sy());
   arduboy.print(F("Q"));
   arduboy.setCursor(110,50);
   arduboy.print(loadMe.getForceBody(0)->getYForceVector());

@@ -1,17 +1,27 @@
 #ifndef forceBody_h
 #define forceBody_h
 
-#include "solidBody.h"
-
 class ForceBody {
-  SolidBody* body;
   int forceVector [2];
+  int halfWidth;
+  int displacement [2];
+  int velocity [2] = {0,0};
+  int mass;
   public:
-    ForceBody(SolidBody* solidBody);
-    SolidBody* getBody();
+    ForceBody();
+    void setHalfWidth(int halfWidth);
+    int getHalfWidth();
+    void set_sx(int x);
+    void set_sy(int y);
+    void set_vx(int x);
+    void set_vy(int y);
+    int get_sx();
+    int get_sy();
+    int get_vx();
+    int get_vy();
+    int getMass();
     int getXForceVector ();
     int getYForceVector ();
-    void set_vx (int vx);
     void setForceVector (int newForceVector [2]);
     int getCollisionZone_x1 ();
     int getCollisionZone_x2 ();
