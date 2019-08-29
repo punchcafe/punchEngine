@@ -30,10 +30,12 @@ ForceField thing;
 ForceBody wrappedDude;
 ForceBody wrappedRock;
 ForceBody wrappedThird;
+ForceBody floorBlock;
 PhysicsResolver resolver;
 ForceBody* reflectDude = &wrappedDude;
   ForceBody* reflectRock = &wrappedRock;
   ForceBody* reflectThird = &wrappedThird;
+  ForceBody* reflectFloor = &floorBlock;
   ForceField loadMe;
 
 int breakChecker;
@@ -44,12 +46,15 @@ void setup() {
   breakChecker = 0;
   loadMe.setForceBody(0, reflectDude);
   loadMe.setForceBody(1, reflectThird);
+  loadMe.setForceBody(2, reflectFloor);
   // initiate arduboy instance
   arduboy.begin();
 
   // here we set the framerate to 15, we do not need to run at
   // default 60 and it saves us battery life
   arduboy.setFrameRate(30);
+  floorBlock.set_sx(50);
+  floorBlock.set_sy(110);
   wrappedDude.set_sx(50);
   wrappedDude.set_sy(floor_y*1);
   wrappedRock.set_sx(115);
@@ -72,17 +77,16 @@ void loop() {
 breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   if (!(arduboy.nextFrame()))
     return;
-reflectDude->set_vx(0);
-wrappedDude.set_vy(0);
-  wrappedThird.set_vx(0);
-  wrappedThird.set_vy(0);
+
   loadMe.addGravity();
-  loadMe.resolveVelocities();
   loadMe.resolveColissions();
+  loadMe.resolveVelocities();
+  loadMe.resolveDisplacements();
+  
   
   //resolving vel
 
-  
+  wrappedDude.set_vx(0);
   if(arduboy.pressed(LEFT_BUTTON)){
     wrappedDude.set_vx(2);
   } else if (arduboy.pressed(RIGHT_BUTTON)){
@@ -90,17 +94,8 @@ wrappedDude.set_vy(0);
   }
 
   if(arduboy.pressed(B_BUTTON)){
-    if((wrappedDude.get_vy() == 0 && wrappedDude.get_sy()>=50)||
-      (wrappedDude.get_vy() == 0)&&(thing.isColliding(reflectDude, reflectThird))){
-      wrappedDude.set_vy(4);
-      }
+      wrappedDude.set_vy(-5);
   }
-
-  if((wrappedDude.get_sy() - wrappedDude.get_vy()) > floor_y){
-    wrappedDude.set_sy(floor_y);
-    wrappedDude.set_vy(0);
-  }
-
 
   
 
@@ -143,8 +138,9 @@ arduboy.setCursor(110, 10);
 arduboy.print(breakChecker);
   arduboy.setCursor(loadMe.getForceBody(0)->get_sx(), loadMe.getForceBody(0)->get_sy());
   arduboy.print(F("Q"));
-  arduboy.setCursor(110,50);
+  arduboy.setCursor(100,50);
   arduboy.print(loadMe.getForceBody(0)->getYForceVector());
+  arduboy.print(loadMe.getForceBody(0)->get_vy());
 
   Sprites::drawOverwrite(90, 20, punchLogo, 0);
 
