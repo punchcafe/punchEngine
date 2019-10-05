@@ -5,7 +5,7 @@
 #include "physicsResolver.h"
 
 class ForceField {
- int gConstant = 10;
+ int gConstant = 7;
  ForceBody* bodies [10]{0};
  PhysicsResolver physicsResolver;
  //ForceResolver->

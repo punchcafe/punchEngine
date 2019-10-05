@@ -8,9 +8,10 @@
 const unsigned char PROGMEM punchLogo[] =
 {
 // width, height,
-16, 16,
-0x00, 0x00, 0xfc, 0x6c, 0x4c, 0x6c, 0x3c, 0x00, 0x00, 0x3c, 0x2c, 0x4c, 0x4c, 0xfc, 0xf8, 0x00,
-0x00, 0x10, 0x3f, 0x00, 0x00, 0x07, 0x1f, 0x1d, 0x1d, 0x17, 0x17, 0x03, 0x60, 0x3f, 0x1f, 0x00,
+25, 23,
+0x00, 0x00, 0x00, 0x00, 0xf8, 0x28, 0x28, 0x28, 0x28, 0x28, 0xf8, 0x00, 0x00, 0x00, 0xf8, 0x28, 0x28, 0x28, 0x28, 0x28, 0xf8, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0xff, 0x01, 0x01, 0x01, 0x01, 0x79, 0x89, 0x88, 0x88, 0x88, 0x79, 0x49, 0x39, 0x01, 0x01, 0x01, 0xff, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x00, 0x00, 0x08, 0x08, 0x07, 0x00, 0x00, 0x00, 0x00,
 };
 
 
@@ -52,7 +53,7 @@ void setup() {
 
   // here we set the framerate to 15, we do not need to run at
   // default 60 and it saves us battery life
-  arduboy.setFrameRate(30);
+  arduboy.setFrameRate(20);
   floorBlock.set_sx(50);
   floorBlock.set_sy(110);
   wrappedDude.set_sx(50);
@@ -78,15 +79,13 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   if (!(arduboy.nextFrame()))
     return;
 
+
+
+
   loadMe.addGravity();
   loadMe.resolveColissions();
   loadMe.resolveVelocities();
-  loadMe.resolveDisplacements();
-  
-  
-  //resolving vel
-
-  wrappedDude.set_vx(0);
+    wrappedDude.set_vx(0);
   if(arduboy.pressed(LEFT_BUTTON)){
     wrappedDude.set_vx(2);
   } else if (arduboy.pressed(RIGHT_BUTTON)){
@@ -94,10 +93,17 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   }
 
   if(arduboy.pressed(B_BUTTON)){
-      wrappedDude.set_vy(-5);
+     if(wrappedDude.get_vy() == 0 || wrappedDude.get_sy() ==50){
+      wrappedDude.set_vy(-15);
+     }
   }
+  loadMe.resolveDisplacements();
 
-  
+
+  //resolving vel
+
+
+
 
 
 
@@ -115,7 +121,7 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
     arduboy.setCursor(wrappedThird.get_sx(),wrappedThird.get_sy());
   arduboy.print("-");
 //work out something to make this work
-  
+
 
 int collisionZone [2][2];
   collisionZone[0][0] = wrappedDude.getCollisionZone_x1();
@@ -133,16 +139,17 @@ int collisionZone [2][2];
       arduboy.print(F("-"));
       };
 
- 
+
 arduboy.setCursor(110, 10);
 arduboy.print(breakChecker);
   arduboy.setCursor(loadMe.getForceBody(0)->get_sx(), loadMe.getForceBody(0)->get_sy());
   arduboy.print(F("Q"));
-  arduboy.setCursor(100,50);
+  arduboy.setCursor(90,50);
   arduboy.print(loadMe.getForceBody(0)->getYForceVector());
   arduboy.print(loadMe.getForceBody(0)->get_vy());
+  arduboy.print(loadMe.getForceBody(0)->get_sy());
 
-  Sprites::drawOverwrite(90, 20, punchLogo, 0);
+  Sprites::drawOverwrite(90, 17, punchLogo, 0);
 
   arduboy.display();
 }

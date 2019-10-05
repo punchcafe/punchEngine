@@ -27,7 +27,7 @@ void ForceField::resolveColissions(){
         if(j != i && bodies[j] != 0){
           if(isColliding(bodies[i],bodies[j])){
             int forceVector [2] = {bodies[i]->getXForceVector(), 0};
-            if(bodies[i]->getYForceVector() != 0) bodies[i]->set_vy(0);
+            if(bodies[i]->getYForceVector() > 0) bodies[i]->set_vy(0);
             bodies[i]->setForceVector(forceVector);
           }
         }
@@ -50,7 +50,7 @@ void ForceField::resolveVelocities(){
 void ForceField::resolveDisplacements(){
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
-      int yDisplace = bodies[i]->get_sy()+bodies[i]->get_vy()*1;
+      int yDisplace = bodies[i]->get_sy()+bodies[i]->get_vy();
       bodies[i]->set_sx(bodies[i]->get_sx()+bodies[i]->get_vx());
       bodies[i]->set_sy(yDisplace < 50 ? yDisplace : 50);//time unit, pass through constructor.
     }
