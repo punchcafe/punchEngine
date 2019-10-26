@@ -5,6 +5,7 @@
 #include "physicsResolver.h"
 
 class ForceField {
+ int heroIndex;
  int gConstant = 7;
  ForceBody* bodies [10]{0};
  PhysicsResolver physicsResolver;
@@ -18,6 +19,7 @@ class ForceField {
  public:
    ForceField();
    ForceBody* getForceBody(int index);
+   ForceBody* getHero();
    void setForceBody(int index, ForceBody* forceBody);
    void addGravity();
    void resolveColissions();

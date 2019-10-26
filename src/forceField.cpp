@@ -5,6 +5,11 @@ ForceField::ForceField() {};
 ForceBody* ForceField::getForceBody(int index) {
   return bodies[index];
 }
+
+ForceBody* ForceField::getHero() {
+  return bodies[heroIndex];
+}
+
 void ForceField::setForceBody(int index, ForceBody* forceBody) {
   bodies[index] = forceBody;
 }
@@ -41,8 +46,8 @@ void ForceField::resolveVelocities(){
     if(bodies[i] != 0){
       int xVel = bodies[i]->get_vx() + ((bodies[i]->getXForceVector())/(bodies[i]->getMass()))*1;
       int yVel = bodies[i]->get_vy() + bodies[i]->getYForceVector();
-      bodies[i]->set_vx(xVel <= 5 ? xVel : 5);//TIME
-      bodies[i]->set_vy(yVel <= 5 ? yVel : 5);//NEEDS MASS
+      bodies[i]->set_vx(xVel <= 10 ? xVel : 10);//TIME
+      bodies[i]->set_vy(yVel <= 10 ? yVel : 10);//NEEDS MASS
     }
   }
 }
@@ -52,7 +57,7 @@ void ForceField::resolveDisplacements(){
     if(bodies[i] != 0){
       int yDisplace = bodies[i]->get_sy()+bodies[i]->get_vy();
       bodies[i]->set_sx(bodies[i]->get_sx()+bodies[i]->get_vx());
-      bodies[i]->set_sy(yDisplace < 50 ? yDisplace : 50);//time unit, pass through constructor.
+      bodies[i]->set_sy(yDisplace < 500 ? yDisplace : 500);//time unit, pass through constructor.
     }
   }
 }

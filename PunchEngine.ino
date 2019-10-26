@@ -53,7 +53,7 @@ void setup() {
 
   // here we set the framerate to 15, we do not need to run at
   // default 60 and it saves us battery life
-  arduboy.setFrameRate(20);
+  arduboy.setFrameRate(40);
   floorBlock.set_sx(50);
   floorBlock.set_sy(110);
   wrappedDude.set_sx(50);
@@ -62,8 +62,8 @@ void setup() {
   wrappedRock.set_sy(15);
   wrappedThird.set_sx(15);
   wrappedThird.set_sy(45);
-  floor_y = 50;
-  s_x = 50;
+  floor_y = 500;
+  s_x = 500;
   s_y = floor_y*1;
   t=1;
 }
@@ -85,15 +85,17 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   loadMe.addGravity();
   loadMe.resolveColissions();
   loadMe.resolveVelocities();
+  //make a interface to hand to this during building. resolveUser calls a method on that
+  //define user 0
     wrappedDude.set_vx(0);
   if(arduboy.pressed(LEFT_BUTTON)){
-    wrappedDude.set_vx(2);
+    wrappedDude.set_vx(5);
   } else if (arduboy.pressed(RIGHT_BUTTON)){
-    wrappedDude.set_vx(-2);
+    wrappedDude.set_vx(-5);
   }
 
   if(arduboy.pressed(B_BUTTON)){
-     if(wrappedDude.get_vy() == 0 || wrappedDude.get_sy() ==50){
+     if(wrappedDude.get_vy() == 0 || wrappedDude.get_sy() ==500){
       wrappedDude.set_vy(-15);
      }
   }
@@ -116,9 +118,9 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
     arduboy.setCursor(2, 50);
   arduboy.print(F("......................."));
 
-  arduboy.setCursor(wrappedRock.get_sx(),wrappedRock.get_sy());
+  arduboy.setCursor(wrappedRock.get_sx()/10,wrappedRock.get_sy()/10);
   arduboy.print("*");
-    arduboy.setCursor(wrappedThird.get_sx(),wrappedThird.get_sy());
+    arduboy.setCursor(wrappedThird.get_sx()/10,wrappedThird.get_sy()/10);
   arduboy.print("-");
 //work out something to make this work
 
@@ -130,19 +132,19 @@ int collisionZone [2][2];
   collisionZone[1][1] = wrappedDude.getCollisionZone_y2();
 
     for(int i = 0; i < 2; i++){
-      arduboy.setCursor(collisionZone[0][i], wrappedDude.get_sy());
+      arduboy.setCursor(collisionZone[0][i]/10, wrappedDude.get_sy()/10);
       arduboy.print(F("|"));
     };
 
         for(int j = 0; j < 2; j++){
-      arduboy.setCursor(wrappedDude.get_sx(), collisionZone[1][j]);
+      arduboy.setCursor(wrappedDude.get_sx()/10, collisionZone[1][j]/10);
       arduboy.print(F("-"));
       };
 
 
 arduboy.setCursor(110, 10);
 arduboy.print(breakChecker);
-  arduboy.setCursor(loadMe.getForceBody(0)->get_sx(), loadMe.getForceBody(0)->get_sy());
+  arduboy.setCursor(loadMe.getForceBody(0)->get_sx()/10, loadMe.getForceBody(0)->get_sy()/10);
   arduboy.print(F("Q"));
   arduboy.setCursor(90,50);
   arduboy.print(loadMe.getForceBody(0)->getYForceVector());
