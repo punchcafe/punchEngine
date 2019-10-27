@@ -1,4 +1,5 @@
 #include "forceField.h"
+#include <Arduboy2.h>
 
 ForceField::ForceField() {};
   //MAKE SPECIAL FORCEBODY, 0th index?
@@ -62,6 +63,20 @@ void ForceField::resolveDisplacements(){
   }
 }
 
+void ForceField::resolveUserInput(Arduboy2 arduboy){
+  getHero()->set_vx(0);
+  if(arduboy.pressed(RIGHT_BUTTON)){
+    getHero()->set_vx(10);
+  } else if (arduboy.pressed(LEFT_BUTTON)){
+    getHero()->set_vx(-10);
+  }
+  if(arduboy.pressed(B_BUTTON)){
+     if(getHero()->get_vy() == 0 || getHero()->get_sy() ==500){
+      getHero()->set_vy(-50);
+     }
+  }
+}
+
 
 bool ForceField::isColliding(ForceBody* body, ForceBody* otherBody){
   //only works for squares
@@ -72,30 +87,30 @@ bool ForceField::isColliding(ForceBody* body, ForceBody* otherBody){
                             otherBody : body;
   int smallerBodyCorners[4][2] = {
     {
-      smallerBody->get_sx()+smallerBody->getHalfWidth(),
-      smallerBody->get_sy()-smallerBody->getHalfWidth()
+      smallerBody->getCollisionZone_x2(),
+      smallerBody->getCollisionZone_y1()
     },
     {
-      smallerBody->get_sx()+smallerBody->getHalfWidth(),
-      smallerBody->get_sy()+smallerBody->getHalfWidth()
+      smallerBody->getCollisionZone_x2(),
+      smallerBody->getCollisionZone_y2()
     },
     {
-      smallerBody->get_sx()-smallerBody->getHalfWidth(),
-      smallerBody->get_sy()+smallerBody->getHalfWidth()
+      smallerBody->getCollisionZone_x1(),
+      smallerBody->getCollisionZone_y2()
       },
     {
-      smallerBody->get_sx()-smallerBody->getHalfWidth(),
-      smallerBody->get_sy()-smallerBody->getHalfWidth()
+      smallerBody->getCollisionZone_x1(),
+      smallerBody->getCollisionZone_y1()
     }
   };
 //change it to halflength half height
   for(int i = 0; i<4; i++){
     result = result || physicsResolver.isContact(
       smallerBodyCorners[i],
-      biggerBody->get_sx()-biggerBody->getHalfWidth(),
-      biggerBody->get_sx()+biggerBody->getHalfWidth(),
-      biggerBody->get_sy()-biggerBody->getHalfWidth(),
-      biggerBody->get_sy()+biggerBody->getHalfWidth()
+      biggerBody->getCollisionZone_x1(),
+      biggerBody->getCollisionZone_x2(),
+      biggerBody->getCollisionZone_y1(),
+      biggerBody->getCollisionZone_y2()
       );
   }
 

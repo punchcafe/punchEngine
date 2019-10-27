@@ -2,15 +2,18 @@
 #define forceBody_h
 
 class ForceBody {
-  int forceVector [2];
+  long int forceVector [2];
   int halfWidth;
-  int displacement [2];
+  int halfHeight;
+  long int displacement [2];
   int velocity [2] = {0,0};
   int mass;
   public:
     ForceBody();
     void setHalfWidth(int halfWidth);
     int getHalfWidth();
+    void setHalfHeight(int halfHeight);
+    int getHalfHeight();
     void set_sx(int x);
     void set_sy(int y);
     void set_vx(int x);

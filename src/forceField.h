@@ -3,6 +3,7 @@
 
 #include "forceBody.h"
 #include "physicsResolver.h"
+#include <Arduboy2.h>
 
 class ForceField {
  int heroIndex;
@@ -25,6 +26,7 @@ class ForceField {
    void resolveColissions();
    void resolveVelocities();
    void resolveDisplacements();
+   void resolveUserInput(Arduboy2 arduboy);
    bool isColliding(ForceBody* body, ForceBody* otherBody);
    //int forceVector resolveCollision(ForceBody body){return 0;};
 };

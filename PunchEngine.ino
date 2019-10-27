@@ -53,15 +53,18 @@ void setup() {
 
   // here we set the framerate to 15, we do not need to run at
   // default 60 and it saves us battery life
-  arduboy.setFrameRate(40);
+  arduboy.setFrameRate(120);
   floorBlock.set_sx(50);
+  //floorBlock.setHalfWidth(600);
+  //floorBlock.setHalfHeight(10);
   floorBlock.set_sy(110);
   wrappedDude.set_sx(50);
+  wrappedDude.setHalfHeight(100);
   wrappedDude.set_sy(floor_y*1);
-  wrappedRock.set_sx(115);
-  wrappedRock.set_sy(15);
-  wrappedThird.set_sx(15);
-  wrappedThird.set_sy(45);
+  wrappedRock.set_sx(1000);
+  wrappedRock.set_sy(150);
+  wrappedThird.set_sx(150);
+  wrappedThird.set_sy(200);
   floor_y = 500;
   s_x = 500;
   s_y = floor_y*1;
@@ -76,8 +79,8 @@ void setup() {
 void loop() {
   // pause render until it's time for the next frame
 breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
-  if (!(arduboy.nextFrame()))
-    return;
+  //if (!(arduboy.nextFrame()))
+  //  return;
 
 
 
@@ -87,18 +90,7 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   loadMe.resolveVelocities();
   //make a interface to hand to this during building. resolveUser calls a method on that
   //define user 0
-    wrappedDude.set_vx(0);
-  if(arduboy.pressed(LEFT_BUTTON)){
-    wrappedDude.set_vx(5);
-  } else if (arduboy.pressed(RIGHT_BUTTON)){
-    wrappedDude.set_vx(-5);
-  }
-
-  if(arduboy.pressed(B_BUTTON)){
-     if(wrappedDude.get_vy() == 0 || wrappedDude.get_sy() ==500){
-      wrappedDude.set_vy(-15);
-     }
-  }
+  loadMe.resolveUserInput(arduboy);
   loadMe.resolveDisplacements();
 
 
@@ -120,7 +112,7 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
 
   arduboy.setCursor(wrappedRock.get_sx()/10,wrappedRock.get_sy()/10);
   arduboy.print("*");
-    arduboy.setCursor(wrappedThird.get_sx()/10,wrappedThird.get_sy()/10);
+  arduboy.setCursor(wrappedThird.get_sx()/10,wrappedThird.get_sy()/10);
   arduboy.print("-");
 //work out something to make this work
 

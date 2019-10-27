@@ -2,7 +2,8 @@
 
 ForceBody::ForceBody(){
   mass = 1;
-  halfWidth = 5;
+  halfWidth = 50;
+  halfHeight = 50;
 }
 
 int ForceBody::getXForceVector () {
@@ -25,11 +26,11 @@ int ForceBody::getCollisionZone_x2 () {
 }
 
 int ForceBody::getCollisionZone_y1 () {
-  return get_sy()-getHalfWidth();
+  return get_sy()-getHalfHeight();
 }
 
 int ForceBody::getCollisionZone_y2 () {
-  return get_sy()+getHalfWidth();
+  return get_sy()+getHalfHeight();
 }
 
 void ForceBody::setHalfWidth(int halfWidth){
@@ -38,6 +39,12 @@ void ForceBody::setHalfWidth(int halfWidth){
 
 int ForceBody::getHalfWidth(){
   return halfWidth;
+}
+void ForceBody::setHalfHeight(int halfHeight){
+  this->halfHeight = halfHeight;
+}
+int ForceBody::getHalfHeight(){
+  return halfHeight;
 }
 void ForceBody::set_sx(int x) {
   displacement[0] = x;
