@@ -4,7 +4,11 @@
 ForceField::ForceField() {};
   //MAKE SPECIAL FORCEBODY, 0th index?
 ForceBody* ForceField::getForceBody(int index) {
-  return bodies[index];
+  if(index != heroIndex){
+    return bodies[index];
+  } else {
+    //throw error?
+  }
 }
 
 ForceBody* ForceField::getHero() {
@@ -18,20 +22,32 @@ void ForceField::setForceBody(int index, ForceBody* forceBody) {
 //parent in resolveForces
 
 void ForceField::addGravity(){
+  // BIG REFACTOR
+  // Only apply on stuff which is a dynamic body.
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
-      int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getMass()*gConstant};
-      bodies[i]->setForceVector(forceVector);
+      if(bodies[i]->getBodyType() == ForceBody::BodyType::DYNAMIC){
+        int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getMass()*gConstant};
+        bodies[i]->setForceVector(forceVector);
+    }
     }
   }
 }
 
 void ForceField::resolveColissions(){
+  // BIG REFACTOR
+  // pass (i,j) -> {} resolver?
+  // resolve collisions just cares about detection
+  // Detect using path calculation, and watch for any overlapping
+  // aspects.
+
+  //
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
       for(int j = 0; j < sizeof(bodies); j++){
         if(j != i && bodies[j] != 0){
           if(isColliding(bodies[i],bodies[j])){
+            //acting on i
             int forceVector [2] = {bodies[i]->getXForceVector(), 0};
             if(bodies[i]->getYForceVector() > 0) bodies[i]->set_vy(0);
             bodies[i]->setForceVector(forceVector);

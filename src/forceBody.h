@@ -2,6 +2,15 @@
 #define forceBody_h
 
 class ForceBody {
+  public:
+    enum BodyType{
+      DYNAMIC,
+      PLATFORM,
+      INTANGIBLE
+    };
+  private:
+
+  BodyType bodyType;
   long int forceVector [2];
   int halfWidth;
   int halfHeight;
@@ -10,6 +19,7 @@ class ForceBody {
   int mass;
   public:
     ForceBody();
+    BodyType getBodyType();
     void setHalfWidth(int halfWidth);
     int getHalfWidth();
     void setHalfHeight(int halfHeight);

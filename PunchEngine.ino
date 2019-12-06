@@ -83,12 +83,16 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   //  return;
 
 
+///final look:
+///gameContext.increment()
+///gamePrinter.print() -- is handed the arduboy.
+
 
 
   loadMe.addGravity();
   loadMe.resolveColissions();
   loadMe.resolveVelocities();
-  //make a interface to hand to this during building. resolveUser calls a method on that
+  //make an interface to hand to this during building. resolveUser calls a method on that
   //define user 0
   loadMe.resolveUserInput(arduboy);
   loadMe.resolveDisplacements();

@@ -6,7 +6,7 @@
 #include <Arduboy2.h>
 
 class ForceField {
- int heroIndex;
+ int heroIndex = 0;
  int gConstant = 7;
  ForceBody* bodies [10]{0};
  PhysicsResolver physicsResolver;

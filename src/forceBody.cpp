@@ -6,6 +6,10 @@ ForceBody::ForceBody(){
   halfHeight = 50;
 }
 
+ForceBody::BodyType ForceBody::getBodyType () {
+  return bodyType;
+}
+
 int ForceBody::getXForceVector () {
   return forceVector[0];
 }
