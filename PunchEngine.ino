@@ -99,6 +99,7 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
   //make an interface to hand to this during building. resolveUser calls a method on that
   //define user 0
   loadMe.resolveDisplacements();
+  loadMe.reset();
 
 
   //resolving vel

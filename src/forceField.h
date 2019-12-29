@@ -30,6 +30,7 @@ class ForceField {
    ForceBody* getHero();
    void setForceBody(int index, ForceBody* forceBody);
    void addGravity();
+   void reset();
    void resolveColissions();
    void resolveVelocities();
    void resolveDisplacements();

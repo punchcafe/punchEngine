@@ -17,6 +17,15 @@ ForceBody* ForceField::getHero() {
   return bodies[heroIndex];
 }
 
+void ForceField::reset(){
+  int forceVector [2] = {0,0};
+  for(int i = 0; i < sizeof(bodies); i++){
+    if(bodies[i] != 0){
+      bodies[i]->setForceVector(forceVector);
+    }
+  }
+}
+
 void ForceField::setForceBody(int index, ForceBody* forceBody) {
   bodies[index] = forceBody;
 }
