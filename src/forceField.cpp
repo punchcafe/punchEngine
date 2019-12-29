@@ -1,6 +1,7 @@
 #include "forceField.h"
 #include <Arduboy2.h>
 #include "geometryUtils.cpp"
+#include "physicsResolver.h"
 
 ForceField::ForceField() {};
   //MAKE SPECIAL FORCEBODY, 0th index?
@@ -53,22 +54,34 @@ void ForceField::resolveColissions(){
         // bodyVectorPath1.wrapBody(bodies[i]);
         //TODO: add checking for resolution types, dynamic, platform etc.
         if(j != i && bodies[j] != 0){
-          // bodyVectorPath2.wrapBody(bodies[j]);
-          if(isColliding(bodies[i],bodies[j])){
-            int forceVector [2] = {bodies[i]->getXForceVector(), 0};
-            if(bodies[i]->get_vy() > 0){
-              // Haandles falling from above to platform
-              // If the object still has velocity, apply an impulse to set its velocity to 0;
-              // a*t = v => a = v/t
-              // f = ma
-              // QED => f = m*(v/t)
-              // *-1 for inverse
+            int forceVector [2] = {0,0};
+            switch (collisionCase(bodies[i],bodies[j])) {
+              case TOP:
+                forceVector[0] = bodies[i]->getXForceVector();
+                if(bodies[i]->get_vy() > 0){
+                  // Haandles falling from above to platform
+                  // If the object still has velocity, apply an impulse to set its velocity to 0;
+                  forceVector[1] = PhysicsResolver::stoppingImpulse(bodies[i]->get_vy(),timeConstant, bodies[i]->getMass());
+                }
+                bodies[i]->setForceVector(forceVector);
+                break;
+              case RIGHT:
+                forceVector[1] = bodies[i]->getYForceVector();
+                if(bodies[i]->get_vx() > 0){
+                  forceVector[0] = PhysicsResolver::stoppingImpulse(bodies[i]->get_vx(),timeConstant, bodies[i]->getMass());
+                }
+                bodies[i]->setForceVector(forceVector);
+                break;
+              case LEFT:
+                forceVector[1] = bodies[i]->getYForceVector();
+                if(bodies[i]->get_vx() < 0){
+                  forceVector[0] = PhysicsResolver::stoppingImpulse(bodies[i]->get_vx(),timeConstant, bodies[i]->getMass());
+                }
+                bodies[i]->setForceVector(forceVector);
+                break;
 
-              //Extract to getStoppingImpulse(forceBody)
-              forceVector[1] = ((bodies[i]->get_vy()/timeConstant)*bodies[i]->getMass())*-1;
             }
-            bodies[i]->setForceVector(forceVector);
-          }
+
         }
       }
     }

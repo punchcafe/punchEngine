@@ -24,7 +24,7 @@ class ForceField {
  //temporary fieldMapSoln, checks for 2
  //initially until i work out how to get fuckin vectors
  public:
-   enum CollisionType{TOP, BOTTOM, LEFT, RIGHT, INSIDE, NONE};
+   enum CollisionType{TOP, BOTTOM, RIGHT, LEFT, INSIDE, NONE};
    ForceField();
    ForceBody* getForceBody(int index);
    ForceBody* getHero();

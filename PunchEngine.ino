@@ -92,11 +92,12 @@ breakChecker = breakChecker == 100 ? 0 : breakChecker+1;
 
 
   loadMe.addGravity();
+  loadMe.resolveUserInput(arduboy);
+  // should make this a force
   loadMe.resolveColissions();
   loadMe.resolveVelocities();
   //make an interface to hand to this during building. resolveUser calls a method on that
   //define user 0
-  loadMe.resolveUserInput(arduboy);
   loadMe.resolveDisplacements();
 
 
