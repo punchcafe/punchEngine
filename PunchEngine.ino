@@ -4,6 +4,7 @@
 #include "src/forceBody.h"
 #include "src/physicsResolver.h"
 #include "src/forceField.h"
+#include "src/geometryUtils.cpp"
 
 
 const unsigned char PROGMEM punchLogo[] =
@@ -143,6 +144,8 @@ arduboy.setCursor(110, 10);
 arduboy.print(breakChecker);
   arduboy.setCursor(loadMe.getHero()->get_sx()/10, loadMe.getHero()->get_sy()/10);
   arduboy.print(F("Q"));
+  arduboy.setCursor(10,40);
+  arduboy.print(loadMe.collisionCase(loadMe.getHero(), loadMe.getForceBody(1)));
   arduboy.setCursor(10,50);
 
   arduboy.print(loadMe.getHero()->getYForceVector());

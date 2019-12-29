@@ -24,6 +24,7 @@ class ForceField {
  //temporary fieldMapSoln, checks for 2
  //initially until i work out how to get fuckin vectors
  public:
+   enum CollisionType{TOP, BOTTOM, LEFT, RIGHT, INSIDE, NONE};
    ForceField();
    ForceBody* getForceBody(int index);
    ForceBody* getHero();
@@ -34,6 +35,7 @@ class ForceField {
    void resolveDisplacements();
    void resolveUserInput(Arduboy2 arduboy);
    bool isColliding(ForceBody* body, ForceBody* otherBody);
+   CollisionType collisionCase(ForceBody* body, ForceBody* otherBody);
    //int forceVector resolveCollision(ForceBody body){return 0;};
 };
 #endif

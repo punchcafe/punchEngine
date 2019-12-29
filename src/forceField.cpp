@@ -1,5 +1,6 @@
 #include "forceField.h"
 #include <Arduboy2.h>
+#include "geometryUtils.cpp"
 
 ForceField::ForceField() {};
   //MAKE SPECIAL FORCEBODY, 0th index?
@@ -48,18 +49,22 @@ void ForceField::resolveColissions(){
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
       for(int j = 0; j < sizeof(bodies); j++){
-        //bodyVectorPath1.wrapBody(bodies[i]);
+        // establish collision types, Top, Bottom etc
+        // bodyVectorPath1.wrapBody(bodies[i]);
+        //TODO: add checking for resolution types, dynamic, platform etc.
         if(j != i && bodies[j] != 0){
+          // bodyVectorPath2.wrapBody(bodies[j]);
           if(isColliding(bodies[i],bodies[j])){
-            //acting on i
-            // This line currently defines setting y force to 0
             int forceVector [2] = {bodies[i]->getXForceVector(), 0};
-            if(bodies[i]->get_vy() != 0){
-              // If the object has velocity, apply an impulse to set its velocity to 0;
+            if(bodies[i]->get_vy() > 0){
+              // Haandles falling from above to platform
+              // If the object still has velocity, apply an impulse to set its velocity to 0;
               // a*t = v => a = v/t
               // f = ma
               // QED => f = m*(v/t)
               // *-1 for inverse
+
+              //Extract to getStoppingImpulse(forceBody)
               forceVector[1] = ((bodies[i]->get_vy()/timeConstant)*bodies[i]->getMass())*-1;
             }
             bodies[i]->setForceVector(forceVector);
@@ -105,9 +110,54 @@ void ForceField::resolveUserInput(Arduboy2 arduboy){
   }
 }
 
+ForceField::CollisionType ForceField::collisionCase(ForceBody* body, ForceBody* otherBody){
+
+  if(
+    GeometryUtils::isBetweenInclusive(body->getCollisionZone_x1(), otherBody->getCollisionZone_x1(), otherBody->getCollisionZone_x2())
+    || GeometryUtils::isBetweenInclusive(body->getCollisionZone_x2(), otherBody->getCollisionZone_x1(), otherBody->getCollisionZone_x2())
+    || GeometryUtils::surroundsPoints(body->getCollisionZone_x1(), body->getCollisionZone_x2(),otherBody->getCollisionZone_x1(), otherBody->getCollisionZone_x2())
+  ){
+    // Same x position
+    if(
+      !GeometryUtils::isBetweenInclusive(body->getCollisionZone_y1(), otherBody->getCollisionZone_y1(), otherBody->getCollisionZone_y2())
+      && GeometryUtils::isBetweenInclusive(body->getCollisionZone_y2(), otherBody->getCollisionZone_y1(), otherBody->getCollisionZone_y2())
+    ){
+      return ForceField::CollisionType::TOP;
+    }
+    if(
+      GeometryUtils::isBetweenInclusive(body->getCollisionZone_y1(), otherBody->getCollisionZone_y1(), otherBody->getCollisionZone_y2())
+      && !GeometryUtils::isBetweenInclusive(body->getCollisionZone_y2(), otherBody->getCollisionZone_y1(), otherBody->getCollisionZone_y2())
+    ){
+      return ForceField::CollisionType::BOTTOM;
+    }
+
+  }
+
+  if(
+    GeometryUtils::isBetweenExclusive(body->getCollisionZone_y1(), otherBody->getCollisionZone_y1(), otherBody->getCollisionZone_y2())
+    || GeometryUtils::isBetweenExclusive(body->getCollisionZone_y2(), otherBody->getCollisionZone_y1(), otherBody->getCollisionZone_y2())
+    || GeometryUtils::surroundsPoints(body->getCollisionZone_y1(), body->getCollisionZone_y2(),otherBody->getCollisionZone_y1(), otherBody->getCollisionZone_y2())
+  ){
+    // Same y position
+    if(
+      GeometryUtils::isBetweenInclusive(body->getCollisionZone_x1(), otherBody->getCollisionZone_x1(), otherBody->getCollisionZone_x2())
+      && !GeometryUtils::isBetweenInclusive(body->getCollisionZone_x2(), otherBody->getCollisionZone_x1(), otherBody->getCollisionZone_x2())
+    ){
+      return ForceField::CollisionType::LEFT;
+    }
+    if(
+      !GeometryUtils::isBetweenInclusive(body->getCollisionZone_x1(), otherBody->getCollisionZone_x1(), otherBody->getCollisionZone_x2())
+      && GeometryUtils::isBetweenInclusive(body->getCollisionZone_x2(), otherBody->getCollisionZone_x1(), otherBody->getCollisionZone_x2())
+    ){
+      return ForceField::CollisionType::RIGHT;
+    }
+  }
+  return ForceField::CollisionType::NONE;
+}
 
 bool ForceField::isColliding(ForceBody* body, ForceBody* otherBody){
   //only works for squares
+  // TODO: seperate into a enum returning collision TYPES
   bool result = false;
   ForceBody* smallerBody = body->getHalfWidth() > otherBody->getHalfWidth() ?
                             body : otherBody;
