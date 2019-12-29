@@ -15,3 +15,8 @@ units of position, speed, time and acceleration are designed to be as low-level 
 
 ## Collision Resolution
 collision resolution is based on two bodies existing in the same space, or touching, on a single frame. Since it isn't based on projecting movement vectors, it means that a limiting factor is that no one body be able to move faster than 10cpx/fm. Manipulating the fps is how you would achieve "faster" and "slower" real time play.
+
+
+TO DO:
+1 - Implement sprite printer using sprite manager and printer.
+2 - create entity factory method/builder. entity is the only way to insert into force field. (could hide force field with facade pattern, e.g. Game.addEntity(Entity)). entity would be stripped into forceBody etc.

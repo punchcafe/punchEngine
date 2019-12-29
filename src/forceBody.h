@@ -11,7 +11,7 @@ class ForceBody {
   private:
 
   BodyType bodyType;
-  long int forceVector [2];
+  long int forceVector [2] = {0,0};
   int halfWidth;
   int halfHeight;
   long int displacement [2];
@@ -20,6 +20,7 @@ class ForceBody {
   public:
     ForceBody();
     BodyType getBodyType();
+    void setBodyType(BodyType type);
     void setHalfWidth(int halfWidth);
     int getHalfWidth();
     void setHalfHeight(int halfHeight);

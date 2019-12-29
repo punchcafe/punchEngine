@@ -27,14 +27,17 @@ void ForceField::addGravity(){
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
       if(bodies[i]->getBodyType() == ForceBody::BodyType::DYNAMIC){
+        // Currently is the default
         int forceVector [2] = {bodies[i]->getXForceVector(), bodies[i]->getMass()*gConstant};
         bodies[i]->setForceVector(forceVector);
-    }
+      }
     }
   }
 }
 
 void ForceField::resolveColissions(){
+  // Resolves forces on bodies from collisions
+
   // BIG REFACTOR
   // pass (i,j) -> {} resolver?
   // resolve collisions just cares about detection
@@ -45,11 +48,20 @@ void ForceField::resolveColissions(){
   for(int i = 0; i < sizeof(bodies); i++){
     if(bodies[i] != 0){
       for(int j = 0; j < sizeof(bodies); j++){
+        //bodyVectorPath1.wrapBody(bodies[i]);
         if(j != i && bodies[j] != 0){
           if(isColliding(bodies[i],bodies[j])){
             //acting on i
+            // This line currently defines setting y force to 0
             int forceVector [2] = {bodies[i]->getXForceVector(), 0};
-            if(bodies[i]->getYForceVector() > 0) bodies[i]->set_vy(0);
+            if(bodies[i]->get_vy() != 0){
+              // If the object has velocity, apply an impulse to set its velocity to 0;
+              // a*t = v => a = v/t
+              // f = ma
+              // QED => f = m*(v/t)
+              // *-1 for inverse
+              forceVector[1] = ((bodies[i]->get_vy()/timeConstant)*bodies[i]->getMass())*-1;
+            }
             bodies[i]->setForceVector(forceVector);
           }
         }
@@ -64,7 +76,7 @@ void ForceField::resolveVelocities(){
       int xVel = bodies[i]->get_vx() + ((bodies[i]->getXForceVector())/(bodies[i]->getMass()))*1;
       int yVel = bodies[i]->get_vy() + bodies[i]->getYForceVector();
       bodies[i]->set_vx(xVel <= 10 ? xVel : 10);//TIME
-      bodies[i]->set_vy(yVel <= 10 ? yVel : 10);//NEEDS MASS
+      bodies[i]->set_vy(yVel <= 50 ? yVel : 50);//NEEDS MASS
     }
   }
 }

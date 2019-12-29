@@ -10,16 +10,20 @@ ForceBody::BodyType ForceBody::getBodyType () {
   return bodyType;
 }
 
+void ForceBody::setBodyType (BodyType type) {
+  this->bodyType = type;
+}
+
 int ForceBody::getXForceVector () {
-  return forceVector[0];
+  return this->forceVector[0];
 }
 int ForceBody::getYForceVector () {
-  return forceVector [1];
+  return this->forceVector[1];
 }
 
 void ForceBody::setForceVector (int newForceVector [2]) {
-  forceVector[0] = newForceVector[0];
-  forceVector[1] = newForceVector[1];
+  this->forceVector[0] = newForceVector[0];
+  this->forceVector[1] = newForceVector[1];
 }
 
 int ForceBody::getCollisionZone_x1 () {

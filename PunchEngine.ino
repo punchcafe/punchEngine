@@ -5,6 +5,7 @@
 #include "src/physicsResolver.h"
 #include "src/forceField.h"
 
+
 const unsigned char PROGMEM punchLogo[] =
 {
 // width, height,
@@ -140,12 +141,15 @@ int collisionZone [2][2];
 
 arduboy.setCursor(110, 10);
 arduboy.print(breakChecker);
-  arduboy.setCursor(loadMe.getForceBody(0)->get_sx()/10, loadMe.getForceBody(0)->get_sy()/10);
+  arduboy.setCursor(loadMe.getHero()->get_sx()/10, loadMe.getHero()->get_sy()/10);
   arduboy.print(F("Q"));
-  arduboy.setCursor(90,50);
-  arduboy.print(loadMe.getForceBody(0)->getYForceVector());
-  arduboy.print(loadMe.getForceBody(0)->get_vy());
-  arduboy.print(loadMe.getForceBody(0)->get_sy());
+  arduboy.setCursor(10,50);
+
+  arduboy.print(loadMe.getHero()->getYForceVector());
+arduboy.print("/");
+  arduboy.print(loadMe.getHero()->get_vy());
+arduboy.print("/");
+  arduboy.print(loadMe.getHero()->get_sy());
 
   Sprites::drawOverwrite(90, 17, punchLogo, 0);
 

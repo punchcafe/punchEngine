@@ -3,13 +3,19 @@
 
 #include "forceBody.h"
 #include "physicsResolver.h"
+#include "VectorPath.cpp"
 #include <Arduboy2.h>
 
 class ForceField {
  int heroIndex = 0;
  int gConstant = 7;
+ int timeConstant = 1;
  ForceBody* bodies [10]{0};
  PhysicsResolver physicsResolver;
+ BodyVectorPath bodyVectorPath1;
+ BodyVectorPath bodyVectorPath2;
+
+
  //ForceResolver->
  //AccelerationResolver->based on force bodies
  //VelocityAppender

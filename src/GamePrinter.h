@@ -9,12 +9,11 @@
 
 class GamePrinter {
   int pixelRatio = 10;
-  ForceField forceField;
   Arduboy2 arduboy;
 
   //add special forceField method; forceField.getHero();
   public:
-    void printBodies;
+    void printGame(GameContext gameContext);
     //Loop through FB, checking sprite against. can re-use sprite refferences
   private:
     void printBody;
