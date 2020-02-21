@@ -47,6 +47,7 @@ void ForceField::addGravity(){
 }
 
 void ForceField::resolveColissions(){
+  // ALTERNATIVE IDEA: LOOK FOR INTERCEPTION POINTS OF STRAIGHT LINES MADE BY THE VELOCITY VECTORS OF OBJECTS
   // Resolves forces on bodies from collisions
 
   // BIG REFACTOR
