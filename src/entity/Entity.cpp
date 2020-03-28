@@ -2,6 +2,7 @@
 #define entity_def
 // naming this entity breaks use of local variables called entity
 class Entity {
+  // In future make this an abstract class so people can implement as they please;
   // Is decoupled from position, so may re-use instances for recurring characters
   private:
     int mass;

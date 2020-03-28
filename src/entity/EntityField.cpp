@@ -1,10 +1,11 @@
+#ifndef entity_field_h
+#define entity_field_h
+
+#include "EntityObserver.cpp"
 #include "FieldElement.cpp"
 #include "Entity.cpp"
-#include "EntityObserver.cpp"
 #include "../utils/LinkedList.cpp"
 
-#ifndef entity_field
-#define entity_field
 class EntityField {
   private:
     LinkedList<EntityObserver> observers;
@@ -17,6 +18,10 @@ class EntityField {
       this->fieldSize = fieldSize;
       entities = new FieldElement [fieldSize];
       this->numberOfEntities = 0;
+    }
+
+    int getNumberOfEntities(){
+      return this->numberOfEntities;
     }
 
     bool registerEntity(Entity entity, int x, int y){

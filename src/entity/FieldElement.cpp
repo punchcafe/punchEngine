@@ -1,13 +1,15 @@
-#include "Entity.cpp"
 #ifndef field_element
 #define field_element
+#include "Entity.cpp"
 
 class FieldElement {
   private:
-    int x;
-    // For some reason calling this entity breaks everything
     Entity* entity;
+    int x;
     int y;
+    // To be added later
+    int z;
+
   public:
     FieldElement(){}
 

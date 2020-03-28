@@ -1,3 +1,6 @@
+#ifndef linked_list_h
+#define linked_list_h
+
 template <class T>
 class LinkedList{
 public:
@@ -8,3 +11,4 @@ public:
 
   }
 };
+#endif
