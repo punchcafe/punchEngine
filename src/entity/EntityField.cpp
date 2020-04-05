@@ -6,6 +6,11 @@
 #include "Entity.cpp"
 #include "../utils/LinkedList.cpp"
 
+// TODO: find out what happens when you need to acces forward referrenced member
+// methods
+// This is why .h files are the best! we can forward ref without worrying about
+// class, then let the .cpp files do the rest while everthing has been included
+
 class EntityField {
   private:
     LinkedList<EntityObserver> observers;

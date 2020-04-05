@@ -10,5 +10,7 @@ public:
   T get(int index){
 
   }
+private:
+  class Element{};
 };
 #endif
