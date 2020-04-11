@@ -2,12 +2,16 @@
 #include <Arduboy2.h>
 #include "src/entity/Entity.cpp"
 #include "src/entity/EntityField.cpp"
+#include "src/dynamics_module/TopDownDynamics.cpp"
 
 EntityField* field = new EntityField(2);
 Entity* hero = new Entity(1, 20, 20);
 Entity* villain = new Entity(1, 30, 30);
+
 bool result;
 Arduboy2 arduboy;
+
+TopDownDynamics* dynamics = new TopDownDynamics(arduboy, field);
 
 // make an instance of arduboy used for many functions
 
@@ -31,15 +35,7 @@ void loop() {
     return;
   arduboy.clear();
   
-  if(arduboy.pressed(LEFT_BUTTON)){
-    field->moveEntity(0, -1, 0);
-  } else if (arduboy.pressed(RIGHT_BUTTON)){
-    field->moveEntity(0, 1, 0);
-  } else if (arduboy.pressed(UP_BUTTON)){
-    field->moveEntity(0, 0, -1);
-  } else if (arduboy.pressed(DOWN_BUTTON)){
-    field->moveEntity(0, 0, 1);
-  }
+  dynamics->resolveInterval(0);
   
   int herox = field->getEntity(0).getX();
   int heroy = field->getEntity(0).getY();
@@ -50,6 +46,6 @@ void loop() {
   arduboy.setCursor(herox,heroy);
   arduboy.print(F("H"));
   arduboy.setCursor(villainx,villainy);
-  arduboy.print(F("V"));
+  arduboy.print(F("Vi"));
   arduboy.display();
 }

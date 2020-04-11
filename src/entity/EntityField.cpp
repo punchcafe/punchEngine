@@ -38,8 +38,8 @@ class EntityField {
       // Check this doesn't break stuff!
       //delete element;
       this->numberOfEntities++;
-      for(int i = 0; i < observers.size(); i++){
-        observers.get(i).respondToNewFieldElement(element);
+      for(int i = 0; i < observers.getSize(); i++){
+        observers.get(i)->respondToNewFieldElement(element);
       }
       return true;
     }

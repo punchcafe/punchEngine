@@ -1,5 +1,5 @@
 /*
-
+TODO: use abstract factory pattern
 class GameContainer {
 private:
   EntityField* entityField;
