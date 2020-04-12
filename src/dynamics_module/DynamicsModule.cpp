@@ -9,7 +9,8 @@ from entities, so that differnt behvaiours, i.e. zelda-esque physics,
 mario esque physics, or underwater style physics may be injected.
 */
 class DynamicsModule : public EntityObserver {
-
+public:
+  virtual void resolveInterval(float interval);
 };
 
 #endif

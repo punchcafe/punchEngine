@@ -13,12 +13,12 @@ private:
   EntityField* entityField;
 public:
 
-  TopDownDynamics(Arduboy2 arduboy, EntityField* entityField){
-    this->arduboy = &arduboy;
+  TopDownDynamics(Arduboy2* arduboy, EntityField* entityField){
+    this->arduboy = arduboy;
     this->entityField = entityField;
   }
 
-  resolveInterval(float interval){
+  void resolveInterval(float interval){
     if(arduboy->pressed(LEFT_BUTTON)){
       entityField->moveEntity(0, -1, 0);
     } else if (arduboy->pressed(RIGHT_BUTTON)){
@@ -38,7 +38,7 @@ public:
 
   }
 
-  virtual void subscribeToEntityField(EntityField* field){
+  void subscribeToEntityField(EntityField* field){
 
   }
 
