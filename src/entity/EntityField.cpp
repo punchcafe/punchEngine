@@ -49,7 +49,7 @@ class EntityField {
       this->numberOfEntities++;
 
       for(int i = 0; i < observers.getSize(); i++){
-        observers.get(i)->respondToNewFieldElement(element);
+        observers.get(i)->respondToNewFieldElement(this->numberOfEntities -1);
       }
       return true;
     }
@@ -69,13 +69,13 @@ class EntityField {
       return true;
     }
 
-    FieldElement getEntity(int index){
+    FieldElement* getEntity(int index){
       // TODO: Handle negative indexes
       if(index >= numberOfEntities){
         // TODO: sort this out
-        return this->entities[numberOfEntities];
+        return &this->entities[numberOfEntities-1];
       }
-      return this->entities[index];
+      return &this->entities[index];
     }
 };
 #endif

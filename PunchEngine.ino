@@ -35,11 +35,11 @@ void loop() {
 
   gameContainer->update(0);
   
-  int herox = field->getEntity(0).getX();
-  int heroy = field->getEntity(0).getY();
+  int herox = field->getEntity(0)->getX();
+  int heroy = field->getEntity(0)->getY();
 
-  int villainx = field->getEntity(1).getX();
-  int villainy = field->getEntity(1).getY();
+  int villainx = field->getEntity(1)->getX();
+  int villainy = field->getEntity(1)->getY();
   
   arduboy.setCursor(herox,heroy);
   arduboy.print(F("H"));

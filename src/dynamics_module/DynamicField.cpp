@@ -9,7 +9,7 @@ class DynamicField : public DynamicsModule {
   DynamicEntity* entities;
 public:
   void respondToNewFieldElement(int i){
-    FieldElement* newElement = &(field->getEntity(i)); // Assumes overwriting of current
+    FieldElement* newElement = field->getEntity(i); // Assumes overwriting of current
     DynamicEntity* newDynamicEntity = new DynamicEntity(newElement);
     this->entities[i] = *newDynamicEntity;
   }
