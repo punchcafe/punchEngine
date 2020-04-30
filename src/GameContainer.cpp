@@ -1,4 +1,5 @@
 #include "dynamics_module/TopDownDynamics.cpp"
+#include "dynamics_module/AstralBodyDynamics.cpp"
 //TODO: use abstract factory pattern
 class GameContainer {
 
@@ -29,12 +30,18 @@ public:
       return this;
     }
 
+    Builder* useAstralBodyPhysics(){
+      this->dynamicsModule = new AstralBodyDynamics(this->arduboy, this->entityField);
+      return this;
+    }
+
     Builder* setEntityField(EntityField* entityField){
       this->entityField = entityField;
       return this;
     }
 
     GameContainer* build(){
+      this->entityField->registerObserver(this->dynamicsModule);
       return new GameContainer(this->entityField, this->dynamicsModule);
     }
 

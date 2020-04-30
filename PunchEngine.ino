@@ -2,30 +2,36 @@
 #include <Arduboy2.h>
 #include "src/entity/Entity.cpp"
 #include "src/entity/EntityField.cpp"
-#include "src/dynamics_module/TopDownDynamics.cpp"
+#include "src/dynamics_module/AstralBodyDynamics.cpp"
 #include "src/GameContainer.cpp"
 
 EntityField* field = new EntityField(2);
 Entity* hero = new Entity(1, 20, 20);
 Entity* villain = new Entity(1, 30, 30);
 
-Arduboy2 arduboy;
-Arduboy2* arduboyPointer = &arduboy;
+LinkedList<Entity> trialList;
 
-GameContainer::Builder* gameBuilder = GameContainer::builder(arduboyPointer);
+int nonBrokenCounter;
+
+Arduboy2 arduboy;
+GameContainer::Builder* gameBuilder = GameContainer::builder(&arduboy);
 GameContainer* gameContainer;
 
 void setup() {
-  field->registerEntity(*hero, 50,20);
-  field->registerEntity(*villain, 70,20);
-  gameContainer = gameBuilder->useTopDownPhysics()->setEntityField(field)->build();
+  Serial.begin(9600);
+  gameContainer = gameBuilder->setEntityField(field)->useAstralBodyPhysics()->build();
+  field->registerEntity(hero, 50,20);
+  field->registerEntity(villain, 70,20);
+  trialList.append(hero);
+  trialList.append(villain);
   arduboy.begin();
 }
 
 void loop() {
-  if (!(arduboy.nextFrame()))
-    return;
+
   arduboy.clear();
+
+  nonBrokenCounter = nonBrokenCounter > 100 ? 0 : nonBrokenCounter + 1;
 
   gameContainer->update(0);
   
@@ -38,6 +44,10 @@ void loop() {
   arduboy.setCursor(herox,heroy);
   arduboy.print(F("H"));
   arduboy.setCursor(villainx,villainy);
-  arduboy.print(F("Vil"));
+  arduboy.print(F("Vill"));
+  
+  
+    arduboy.setCursor(40,30);
+  arduboy.print(nonBrokenCounter);
   arduboy.display();
 }

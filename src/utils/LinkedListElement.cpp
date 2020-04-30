@@ -9,10 +9,10 @@ private:
   LinkedListElement* nextElement;
 
 public:
-  LinkedListElement(T element){
+  LinkedListElement(){
   }
 
-  void setElement(T element){
+  void setElement(T* element){
     this->element = element;
   }
 

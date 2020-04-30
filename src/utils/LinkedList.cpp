@@ -6,19 +6,26 @@
 template <class T>
 class LinkedList{
 private:
-  int size;
+  int size = 0;
   LinkedListElement<T>* head;
   LinkedListElement<T>* tail;
 
 public:
-  void append(T entry){
+  void append(T * entry){
     LinkedListElement<T>* addition = new LinkedListElement<T>();
-    addition.setIsTail(true);
-    addition.setElement(entry);
-    this->tail->setNextElement(addition);
-    this->tail->setIsTail(false);
-    this->tail = addition;
-    size++;
+    if(this->size == 0){
+      this->head = addition;
+      this->tail = addition;
+      addition->setIsTail(true);
+      addition->setElement(entry);
+    } else {
+      addition->setIsTail(true);
+      addition->setElement(entry);
+      this->tail->setNextElement(addition);
+      this->tail->setIsTail(false);
+      this->tail = addition;
+    }
+    this->size = this->size+1;
   }
 
   int getSize(){
@@ -26,7 +33,7 @@ public:
   }
 
   T* get(int index){
-    if(!(index >= this->size)){
+    if(index <= this->size){
       LinkedListElement<T>* element = this->head;
       for(int i = 0; i < index; i++){
         element = element->getNext();

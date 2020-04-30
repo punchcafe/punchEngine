@@ -10,6 +10,9 @@ mario esque physics, or underwater style physics may be injected.
 */
 class DynamicsModule : public EntityObserver {
 public:
+  /*
+  Drive entities in the entity field according to the physics type
+  */
   virtual void resolveInterval(float interval);
 };
 

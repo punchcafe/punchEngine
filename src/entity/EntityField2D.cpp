@@ -1,7 +1,6 @@
 #ifndef entity_field_h
 #define entity_field_h
 
-
 #include "EntityObserver.cpp"
 #include "FieldElement.cpp"
 #include "Entity.cpp"
@@ -11,9 +10,6 @@
 // methods
 // This is why .h files are the best! we can forward ref without worrying about
 // class, then let the .cpp files do the rest while everthing has been included
-
-// TODO: rename CartesianEntityField
-// TODO: separate space system from Field, have cartesian + angles
 
 class EntityField {
   private:
@@ -29,10 +25,6 @@ class EntityField {
       this->numberOfEntities = 0;
     }
 
-    void registerObserver(EntityObserver* observer){
-      this->observers.append(observer);
-    }
-
     int getNumberOfEntities(){
       return this->numberOfEntities;
     }
@@ -41,13 +33,11 @@ class EntityField {
       if(numberOfEntities == fieldSize){
         return false;
       }
-      // TODO: refactor! this is doubling up!
       FieldElement* element = new FieldElement(entity, x, y);
       this->entities[numberOfEntities] = *element;
       // Check this doesn't break stuff!
       //delete element;
       this->numberOfEntities++;
-
       for(int i = 0; i < observers.getSize(); i++){
         observers.get(i)->respondToNewFieldElement(element);
       }

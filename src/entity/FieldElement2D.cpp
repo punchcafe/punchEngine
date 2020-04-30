@@ -7,13 +7,12 @@ class FieldElement {
     Entity* entity;
     int x;
     int y;
-    int z;
 
   public:
     FieldElement(){}
 
-    FieldElement(Entity * entity, int x, int y){
-      this->entity = entity;
+    FieldElement(Entity entity, int x, int y){
+      this->entity = &entity;
       this->x = x;
       this->y = y;
     }
@@ -33,17 +32,11 @@ class FieldElement {
     int getY(){
       return this->y;
     }
-    int getZ(){
-      return this->z;
-    }
     void setX(int x){
       this->x = x;
     }
     void setY(int y){
       this->y = y;
-    }
-    void setZ(int z){
-      this->z = z;
     }
 };
 
