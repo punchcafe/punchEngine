@@ -25,47 +25,50 @@ public:
     int numberOfForceContainers = this->forceContainers.getSize();
 
     arduboy->setCursor(10, 10);
-    arduboy->print(this->forceContainers.get(0)->getFieldElement()->getMass());
+    arduboy->print(numberOfForceContainers);
 
-    for(int index = 0; index < numberOfForceContainers; index++){
+    for(int i = 0; i < numberOfForceContainers; i++){
+      if(i == 1){
+        continue;
+      }
       // Resolve forces
-      float resultantForceVector [3];
-      FieldElement * subjectElement = this->forceContainers.get(index)->getFieldElement();
+      arduboy->setCursor(20, 10);
+      arduboy->print(i);
+      float resultantForceVector [3] = {0, 0, 0};
+      FieldElement * subjectElement = this->forceContainers.get(i)->getFieldElement();
       int subjectMass = subjectElement->getMass();
 
-      //arduboy->print(index);
+      arduboy->print(subjectMass);
 
       for(int j = 0; j < numberOfForceContainers; j++){
-        if(j != index){
-          /*
-          arduboy->setCursor(10, 10);
-          arduboy->print(i);
-          arduboy->print(',');
-          arduboy->print(j);
-          */
-          /*
+        if(j != i){
+
           FieldElement * objectElement = this->forceContainers.get(j)->getFieldElement();
           int xsep = subjectElement->getX() - objectElement->getX();
           int ysep = subjectElement->getY() - objectElement->getY();
           int zsep = subjectElement->getZ() - objectElement->getZ();
 
-          //long radiusSquared = ((xsep*xsep) + (ysep*ysep) + (zsep*zsep));
-          //float radius = sqrt(radiusSquared);
+          long radiusSquared = ((xsep*xsep) + (ysep*ysep) + (zsep*zsep));
+          float radius = sqrt(radiusSquared);
 
           //int radius = 1;
           int objectMass = objectElement->getMass();
           float gmag = 1;/*(this->gravityConstant * objectMass * subjectMass) / radiusSquared;*/
           //TODO: make this use constants
-          //resultantForceVector[0] += gmag*((xsep*1.0) / radius);
-          //resultantForceVector[1] += gmag*((ysep*1.0) / radius);
-          //resultantForceVector[2] += gmag*((zsep*1.0) / radius);
+          resultantForceVector[0] += gmag*((xsep*1.0) / radius);
+          resultantForceVector[1] += gmag*((ysep*1.0) / radius);
+          resultantForceVector[2] += gmag*((zsep*1.0) / radius);
 
         }
         //this->entityField->moveEntity(0, 1, 1);
       }
-      subjectElement->setX(resultantForceVector[0]);
-      subjectElement->setY(resultantForceVector[1]);
-      subjectElement->setZ(resultantForceVector[2]);
+arduboy->print(F(":"));
+arduboy->print(resultantForceVector[0]);
+arduboy->print(resultantForceVector[1]);
+arduboy->print(resultantForceVector[2]);
+      this->forceContainers.get(i)->setX(resultantForceVector[0]);
+      this->forceContainers.get(i)->setY(resultantForceVector[1]);
+      this->forceContainers.get(i)->setZ(resultantForceVector[2]);
 
       // Apply velocity changes
       // Move objects

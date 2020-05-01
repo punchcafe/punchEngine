@@ -17,8 +17,8 @@ public:
   void setY(float y){
     this->forcesArray[1] = y;
   }
-  void setZ(float x){
-    this->forcesArray[2];
+  void setZ(float z){
+    this->forcesArray[2] = z;
   }
   float getX(){
     return this->forcesArray[0];

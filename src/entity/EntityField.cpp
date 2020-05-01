@@ -20,7 +20,7 @@ class EntityField {
     LinkedList<EntityObserver> observers;
     // Referrences an array
     FieldElement* entities;
-    int numberOfEntities;
+    int numberOfEntities = 0;
     int fieldSize;
   public:
     EntityField(int fieldSize){
