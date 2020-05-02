@@ -24,16 +24,8 @@ public:
     //this->entityField->moveEntity(0, 1, 1);
     int numberOfForceContainers = this->forceContainers.getSize();
 
-    arduboy->setCursor(10, 10);
-    arduboy->print(numberOfForceContainers);
-
     for(int i = 0; i < numberOfForceContainers; i++){
-      if(i == 1){
-        continue;
-      }
       // Resolve forces
-      arduboy->setCursor(20, 10);
-      arduboy->print(i);
       float resultantForceVector [3] = {0, 0, 0};
       FieldElement * subjectElement = this->forceContainers.get(i)->getFieldElement();
       int subjectMass = subjectElement->getMass();
@@ -49,31 +41,44 @@ public:
           int zsep = subjectElement->getZ() - objectElement->getZ();
 
           long radiusSquared = ((xsep*xsep) + (ysep*ysep) + (zsep*zsep));
-          float radius = sqrt(radiusSquared);
+          float radius = 10;
+          //TODO: fix radius
+          //float radius = sqrt(radiusSquared);
 
-          //int radius = 1;
           int objectMass = objectElement->getMass();
-          float gmag = 1;/*(this->gravityConstant * objectMass * subjectMass) / radiusSquared;*/
+          //TODO: fix gmag
+          //float gmag = (this->gravityConstant * objectMass * subjectMass) / radiusSquared;
+          float gmag = 1;
           //TODO: make this use constants
           resultantForceVector[0] += gmag*((xsep*1.0) / radius);
           resultantForceVector[1] += gmag*((ysep*1.0) / radius);
           resultantForceVector[2] += gmag*((zsep*1.0) / radius);
 
         }
-        //this->entityField->moveEntity(0, 1, 1);
       }
-arduboy->print(F(":"));
-arduboy->print(resultantForceVector[0]);
-arduboy->print(resultantForceVector[1]);
-arduboy->print(resultantForceVector[2]);
       this->forceContainers.get(i)->setX(resultantForceVector[0]);
       this->forceContainers.get(i)->setY(resultantForceVector[1]);
       this->forceContainers.get(i)->setZ(resultantForceVector[2]);
-
+      resolveVelocity(this->forceContainers.get(i), 0.1f);
       // Apply velocity changes
       // Move objects
-    }
 
+    }
+    moveEntities(1);
+
+
+  }
+
+  void resolveVelocity(ForceContainer* container, float interval){
+    container->setVX(container->getVX()+(container->getX()*interval)/(container->getMass()*1.0f));
+    container->setVY(container->getVY()+(container->getY()*interval)/(container->getMass()*1.0f));
+    container->setVZ(container->getVZ()+(container->getZ()*interval)/(container->getMass()*1.0f));
+  }
+
+  void moveEntities(float interval){
+    for(int i = 0; i < forceContainers.getSize(); i++){
+      this->entityField->moveEntity(i, this->forceContainers.get(i)->getVX()*interval*-1, this->forceContainers.get(i)->getVY()*interval*-1);
+    }
   }
 
   void respondToNewFieldElement(int i){

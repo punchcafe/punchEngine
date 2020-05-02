@@ -6,7 +6,7 @@
 #include "src/GameContainer.cpp"
 
 EntityField* field = new EntityField(2);
-Entity* hero = new Entity(105, 20, 20);
+Entity* hero = new Entity(2, 20, 20);
 Entity* villain = new Entity(2, 30, 30);
 
 LinkedList<Entity> trialList;
@@ -20,19 +20,19 @@ GameContainer* gameContainer;
 void setup() {
   Serial.begin(9600);
   gameContainer = gameBuilder->setEntityField(field)->useAstralBodyPhysics()->build();
-  field->registerEntity(hero, 50,20);
-  field->registerEntity(villain, 70,40);
+  field->registerEntity(hero, 30,20);
+  field->registerEntity(villain, 80,50);
   trialList.append(hero);
   trialList.append(villain);
   arduboy.begin();
 }
 
 void loop() {
+    if (!(arduboy.nextFrame()))
+    return;
 
   arduboy.clear();
-  Serial.print(trialList.get(0)->getMass());
-  Serial.print(trialList.get(1)->getMass());
-  Serial.print(trialList.get(0)->getMass());
+
   nonBrokenCounter = nonBrokenCounter > 100 ? 0 : nonBrokenCounter + 1;
 
   gameContainer->update(0);
@@ -44,12 +44,12 @@ void loop() {
   int villainy = field->getEntity(1)->getY();
   
   arduboy.setCursor(herox,heroy);
-  arduboy.print(F("H"));
+  arduboy.print(F("O"));
   arduboy.setCursor(villainx,villainy);
-  arduboy.print(F("Vill"));
+  arduboy.print(F("o"));
   
   
-  arduboy.setCursor(40,30);
+  arduboy.setCursor(90,10);
   arduboy.print(nonBrokenCounter);
   arduboy.display();
 }
